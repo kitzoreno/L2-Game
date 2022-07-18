@@ -5,41 +5,80 @@
 <body>
     <canvas id="gameCanvas" width="400", height="400"></canvas>
     <script>
+
         var canvas, canvasContext;
+
         window.onload = function(){
             canvas = document.getElementById('gameCanvas');
             canvasContext = canvas.getContext('2d');
 
-            setInterval(mainloop, 1000/50);
+            document.addEventListener('keydown' , keyPressed);
+            document.addEventListener('keyup' , keyReleased );
+
+
+            setInterval(mainloop, 1000/60);
         }
 
-        var ship = new Image();
-        ship.src = 'images/ship.png';
 
-        var shipXpos = 0;
-        var shipYpos = 400;
-        var shipXspeed = 5;
+        const PLAYER_SIZE = 10;
+        var playerXpos = 200;
+        var playerYpos = 400 - PLAYER_SIZE;
+        var playerXspeed = 5;
+        var playerYspeed = 5;
+
+        const ENEMY_SIZE = 20;
+        var enemyXpos = 0;
+        var enemyYpos = 0;
+        var enemyXspeed = 5;
+        var enemyYspeed = 5;
+
+        var leftKeyPress = false;
+        var rightKeyPress = false;
+        var upKeyPress = false;
+        var downKeyPress = false;
+
+
 
         function mainloop(){
             colorRect(0,0,canvas.width,canvas.height,'black') //bg
-            drawImg(ship,shipXpos,shipYpos,30,45) //player
 
-            shipMove();
+            colorRect(playerXpos,playerYpos,PLAYER_SIZE,PLAYER_SIZE,'green') //player
+            colorRect(enemyXpos,enemyYpos,ENEMY_SIZE,ENEMY_SIZE,'red') //enemy
+
+            enemyMove();
         }
 
-        function shipMove(){
-            shipXpos -= shipXspeed;
+
+        function keyPressed(evt){
+            console.log(evt.keyCode);
+        }
+
+        function keyReleased(evt){
+            
+        }
+
+
+        function enemyMove(){
+            enemyYpos += enemyYspeed;
+
+            if(enemyYpos > canvas.height){
+                enemyYpos = 0 - ENEMY_SIZE;
+                enemyXpos = Math.floor(Math.random()*(canvas.width - ENEMY_SIZE));
+                enemyYspeed = Math.floor(Math.random()*(12 - 4) + 4);
+            }
+
+        }
+
+
+        function playerMove(){
+            playerXpos += playerXspeed;
+            playerYpos += playerYspeed;
         }
 
         function colorRect(x,y,w,h,c){
             canvasContext.fillStyle = c;
             canvasContext.fillRect(x,y,w,h);
         }
- 
-        function drawImg(src,x,y,w,h){
-            canvasContext.drawImage(src,x,y,w,h);
-        }
-
 
     </script>
 </body>
