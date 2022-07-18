@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<head>
+    <title>My Game</title>
+</head>
+<body>
+    <canvas id="gameCanvas" width="400", height="400"></canvas>
+    <script>
+        var canvas, canvasContext;
+        window.onload = function(){
+            canvas = document.getElementById('gameCanvas');
+            canvasContext = canvas.getContext('2d');
+
+            setInterval(mainloop, 1000/50);
+        }
+
+        var ship = new Image();
+        ship.src = 'images/ship.png';
+
+        var shipXpos = 0;
+        var shipYpos = 400;
+        var shipXspeed = 5;
+
+        function mainloop(){
+            colorRect(0,0,canvas.width,canvas.height,'black') //bg
+            drawImg(ship,shipXpos,shipYpos,30,45) //player
+
+            shipMove();
+        }
+
+        function shipMove(){
+            shipXpos -= shipXspeed;
+        }
+
+        function colorRect(x,y,w,h,c){
+            canvasContext.fillStyle = c;
+            canvasContext.fillRect(x,y,w,h);
+        }
+ 
+        function drawImg(src,x,y,w,h){
+            canvasContext.drawImage(src,x,y,w,h);
+        }
+
+
+    </script>
+</body>
