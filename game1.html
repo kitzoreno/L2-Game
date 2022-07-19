@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<head>
+    <title>My Game</title>
+</head>
+<body>
+    <canvas id="gameCanvas" width="400", height="400"></canvas>
+    <script>
+
+        var canvas, canvasContext;
+
+        window.onload = function(){
+            canvas = document.getElementById('gameCanvas');
+            canvasContext = canvas.getContext('2d');
+
+            document.addEventListener('keydown' , keyPressed);
+            document.addEventListener('keyup' , keyReleased );
+
+
+            setInterval(mainloop, 1000/60);
+        }
+
+
+        const PLAYER_SIZE = 30;
+        var playerXpos = 200;
+        var playerYpos = 400 - PLAYER_SIZE;
+        var playerXspeed = 5;
+        var playerYspeed = 5;
+
+        var leftKeyPress = false;
+        var rightKeyPress = false;
+        var upKeyPress = false;
+        var downKeyPress = false;
+
+
+        const LEFT_KEY = 37;
+        const RIGHT_KEY = 39;
+        const UP_KEY = 38;
+        const DOWN_KEY = 40;
+
+        var score = 0;
+
+
+        function mainloop(){
+            colorRect(0,0,canvas.width,canvas.height,'black') //bg
+
+            colorRect(playerXpos,playerYpos,PLAYER_SIZE,PLAYER_SIZE,'green') //player
+            colorRect(enemyXpos,enemyYpos,ENEMY_SIZE,ENEMY_SIZE,'red') //enemy
+
+            enemyMove();
+            playerMove();
+        }
+
+
+        function keyPressed(evt){
+            if(evt.keyCode == LEFT_KEY){
+                leftKeyPress = true;
+            }
+            if(evt.keyCode == RIGHT_KEY){
+                rightKeyPress = true;
+            }
+            if(evt.keyCode == UP_KEY){
+                upKeyPress = true;
+            }
+            if(evt.keyCode == DOWN_KEY){
+                downKeyPress = true;
+            }
+        }
+
+        function keyReleased(evt){
+            if(evt.keyCode == LEFT_KEY){
+                leftKeyPress = false;
+            }
+            if(evt.keyCode == RIGHT_KEY){
+                rightKeyPress = false;
+            }
+            if(evt.keyCode == UP_KEY){
+                upKeyPress = false;
+            }
+            if(evt.keyCode == DOWN_KEY){
+                downKeyPress = false;
+            }
+        }
+
+
+        function enemyMove(){
+            enemyYpos += enemyYspeed;
+
+            if(enemyYpos > canvas.height){
+                enemyYpos = 0 - ENEMY_SIZE;
+                enemyXpos = Math.floor(Math.random()*(canvas.width - ENEMY_SIZE));
+                enemyYspeed = Math.floor(Math.random()*(4 - 2) + 2);
+            }
+
+            if(enemyYpos + ENEMY_SIZE > playerYpos && enemyYpos < playerYpos + PLAYER_SIZE && enemyXpos + ENEMY_SIZE > playerXpos && enemyXpos < playerXpos + PLAYER_SIZE){
+                playerXpos = 0;
+                playerYpos = canvas.height - PLAYER_SIZE;
+                score++;
+                console.log('score'+ score);
+
+            }
+
+        }
+
+
+        function playerMove(){
+            if(leftKeyPress && playerXpos > 0){ // left move stop a canvas left edge
+                playerXpos -= playerXspeed;
+            }
+            if(rightKeyPress ){ // right move
+                playerXpos += playerXspeed;
+                if(playerXpos > canvas.width){ // if out of canvas right side appear on left side half in
+                    playerXpos = 0 - PLAYER_SIZE / 2
+                }
+            }
+            if(upKeyPress){
+                playerYpos -= playerYspeed;
+            }
+            if(downKeyPress){
+                playerYpos += playerYspeed;
+            }
+        }
+
+        const ENEMY_SIZE = 40;
+        var enemyXpos = 0;
+        var enemyYpos = 0;
+        var enemyXspeed = 5;
+        var enemyYspeed = 5;
+
+
+        function colorRect(x,y,w,h,c){
+            canvasContext.fillStyle = c;
+            canvasContext.fillRect(x,y,w,h);
+        }
+
+    </script>
+</body>
