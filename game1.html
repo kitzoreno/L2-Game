@@ -38,16 +38,28 @@
         const DOWN_KEY = 40;
 
         var score = 0;
+        var totalEnemies = 8
+        var enemies = [];
+
+        var startingPos = true;
 
 
         function mainloop(){
             colorRect(0,0,canvas.width,canvas.height,'black') //bg
 
             colorRect(playerXpos,playerYpos,PLAYER_SIZE,PLAYER_SIZE,'green') //player
-            colorRect(enemyXpos,enemyYpos,ENEMY_SIZE,ENEMY_SIZE,'red') //enemy
 
             enemyMove();
             playerMove();
+            drawEnemy();
+            
+            if(startingPos){
+                for(i=0; i < totalEnemies; i++){
+                    makeEnemy();
+                }
+
+            startingPos = false;
+            }
         }
 
 
@@ -83,22 +95,25 @@
 
 
         function enemyMove(){
-            enemyYpos += enemyYspeed;
+            enemies.forEach(function(enemy){
 
-            if(enemyYpos > canvas.height){
-                enemyYpos = 0 - ENEMY_SIZE;
-                enemyXpos = Math.floor(Math.random()*(canvas.width - ENEMY_SIZE));
-                enemyYspeed = Math.floor(Math.random()*(4 - 2) + 2);
+
+            enemy.enemyYpos += enemy.enemyYspeed;
+
+            if(enemy.enemyYpos > canvas.height){
+                enemy.enemyYpos = 0 - enemy.ENEMY_SIZE;
+                enemy.enemyXpos = Math.floor(Math.random()*(canvas.width - enemy.ENEMY_SIZE));
+                enemy.enemyYspeed = Math.floor(Math.random()*(4 - 2) + 2);
             }
 
-            if(enemyYpos + ENEMY_SIZE > playerYpos && enemyYpos < playerYpos + PLAYER_SIZE && enemyXpos + ENEMY_SIZE > playerXpos && enemyXpos < playerXpos + PLAYER_SIZE){
+            if(enemy.enemyYpos + enemy.ENEMY_SIZE > enemy.playerYpos && enemy.enemyYpos < playerYpos + PLAYER_SIZE && enemy.enemyXpos + enemy.ENEMY_SIZE > playerXpos && enemy.enemyXpos < playerXpos + PLAYER_SIZE){
                 playerXpos = 0;
                 playerYpos = canvas.height - PLAYER_SIZE;
                 score++;
                 console.log('score'+ score);
 
             }
-
+        });
         }
 
 
@@ -120,11 +135,36 @@
             }
         }
 
-        const ENEMY_SIZE = 40;
-        var enemyXpos = 0;
-        var enemyYpos = 0;
-        var enemyXspeed = 5;
-        var enemyYspeed = 5;
+        function makeEnemy(){
+            var enemyPos = Math.floor(Math.random() * 3) + 1;
+
+            const ENEMY_SIZE = 40;
+           // var enemyXpos = Math.floor(Math.random()*(canvas.width - ENEMY_SIZE));
+            var enemyXpos = enemyPos * (canvas.width / 3);
+            var enemyYpos = 0 - ENEMY_SIZE;
+            var enemyXspeed = Math.floor(Math.random()*(4 - 2) + 2);
+            var enemyYspeed = Math.floor(Math.random()*(12 - 4) + 4);
+
+            var enemy = {
+                enemyXpos: enemyXpos,
+                enemyYpos: enemyPos,
+                ENEMY_SIZE: ENEMY_SIZE,
+                enemyXspeed: enemyXspeed,
+                enemyYspeed: enemyYspeed
+            }
+
+            enemies.push(enemy);
+
+        }
+
+
+
+        function drawEnemies(){
+            enemies.forEach(function(enemy, i){
+                colorRect(enemy.enemyXpos, enemy.enemyYpos, enemy.ENEMY_SIZE, enemy.ENEMY_SIZE,'red') //enemy
+            });
+        }
+
 
 
         function colorRect(x,y,w,h,c){
