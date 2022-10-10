@@ -70,7 +70,7 @@
         //bullets
         var bulletsWidth = 0;
         var bulletsHeight = 0;
-        var bulletsSpeed = 100;
+        var bulletsSpeed = 35;
         var bulletsYpos = 0;
         var bulletsXpos = 0;
         var bulletsGo = true;
@@ -102,7 +102,6 @@
 
         var shipspace = new Image();
         shipspace.src = 'images/shipspace.png';
-
 
         function mainloop() { // loop runs code 50 times per secound
             if (gameRun) {
@@ -150,9 +149,6 @@
             if (evt.keyCode == D_KEY) {
                 DKeyPressed = true;
             }
-            if (evt.keyCode == O_KEY) {
-                OKeyPressed = true;
-            }
         } // end func 
 
         //player not moving
@@ -169,13 +165,10 @@
             if (evt.keyCode == D_KEY) {
                 DKeyPressed = false;
             }
-            if (evt.keyCode == O_KEY) {
-                OKeyPressed = false;
-            }
         } // end func 
         
         function bullet() {
-            if (OKeyPressed && bulletGo) {
+            if (wKeyPressed && bulletGo) {
                 bulletWidth = 15;
                 bulletHeight = 40;
                 bulletXpos = shipXpos + 17;
