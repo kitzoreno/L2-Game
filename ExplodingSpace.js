@@ -14,7 +14,7 @@
 
     var userName = '';
     while (userName == '' || userName == null) {
-        userName = prompt('What is your name?', '') //tony
+        userName = prompt('What is your name? The objective in the game is to dodge the asteroids. If you get touched by the asteroids you die. There is a restart button on the bottom right. To move use the WASD keys on the keyboard. Have fun and good luck!', '') //tony
     }
 
     var difficulty = '';
@@ -31,14 +31,12 @@
     }// end func
 
 
-
     function mainloop() { // loop runs code 50 times per secound
         if (gameRun) {
 
             colorRect(0,0,canvas.width,canvas.height,'black') //bg
-            colorRect(bulletXpos, bulletYpos, BULLET_WIDTH, BULLET_HEIGHT, 'blue');
             drawImage(shipspace,playerXpos, playerYpos, PLAYERSIZE, PLAYERSIZE, 'red');
-            // colorRect(enemyXpos, enemyYpos, ENEMY_SIZE, ENEMY_SIZE, 'orange');
+            // colorRect(enemyXpos, enemyYpos, ENEMYSIZE, ENEMYSIZE, 'orange');
 
             drawText('score: ' + score, 0, 20, '20px Ariel', 'white');
             // drawText('deaths: ' + deaths, canvas.width - 100, 20, '20px Ariel', 'red');
@@ -56,7 +54,6 @@
             enemydraw();
             enemymove();
             bulletShoot();
-            backgroundMove();
 
         } else {
             colorRect(0, 0, canvas.width, canvas.height, 'black');
@@ -87,17 +84,9 @@
     var enemyYpos = 5;
     var enemyXspeed = 2;
     var enemyYspeed = 2;
-    var ENEMY_SIZE = 20;
+    var ENEMYSIZE = 20;
 
     var enemys = [];
-
-    // bullet variables
-    var bulletXpos = 0;
-    var bulletYpos = 0;
-    const BULLET_WIDTH = 4;
-    const BULLET_HEIGHT = 4;
-    var bulletYspeed = 10;
-
 
     // key codes
     const W_KEY = 87;
@@ -185,35 +174,11 @@
 
 
 
-    //Bullet
-        var shooting = false;
-        var shot = false;
-
-        function bulletShoot(){
-            if(shooting && shot == false){
-                bulletXpos = playerXpos + PLAYERSIZE / 2 - BULLET_WIDTH / 2; // x center
-                bulletYpos = playerYpos;
-                shot = true;
-            }
-            if(shooting && shot){
-                bulletYpos -= bulletYspeed;
-            }
-            if(bulletYpos < 0 || bulletXpos + BULLET_WIDTH > enemyXpos && bulletXpos < enemyXpos + ENEMY_SIZE && bulletYpos + BULLET_HIGHT > enemyYpos && bulletYpos < enemyYpos + ENEMY_SIZE){
-                shot = false;
-                shooting = false;
-            }
-            if(shot == false && shooting == false){
-                bulletXpos = 0;
-                bulletYpos = 0;
-            }
-        }
-
-
 
     //draws the ememys 
     function enemydraw() {
         enemys.forEach(function(brick, i) {
-            drawImage(asteroid,brick.enemyXpos, brick.enemyYpos, brick.ENEMY_SIZE, brick.ENEMY_SIZE);
+            drawImage(asteroid,brick.enemyXpos, brick.enemyYpos, brick.ENEMYSIZE, brick.ENEMYSIZE);
         });
     } // end func 
 
@@ -227,10 +192,10 @@
                 brick.enemyYspeed *= 1;
             }
 
-            if (brick.enemyYpos + brick.ENEMY_SIZE > playerYpos && brick.enemyYpos < playerYpos + PLAYERSIZE && brick.enemyXpos + brick.ENEMY_SIZE > playerXpos && brick.enemyXpos < playerXpos + PLAYERSIZE) {
+            if (brick.enemyYpos + brick.ENEMYSIZE > playerYpos && brick.enemyYpos < playerYpos + PLAYERSIZE && brick.enemyXpos + brick.ENEMYSIZE > playerXpos && brick.enemyXpos < playerXpos + PLAYERSIZE) {
                 deaths++;
                 brick.enemyYpos = 0;
-                brick.enemyXpos = Math.floor(Math.random() * (canvas.width - ENEMY_SIZE));
+                brick.enemyXpos = Math.floor(Math.random() * (canvas.width - ENEMYSIZE));
                 console.log('deaths:' + deaths);
 
                 if (deaths >= 1) {
@@ -243,25 +208,26 @@
             if (brick.enemyYpos > canvas.height) {
                 brick.enemyYpos = 0; //makes enemies go back to the top of the screen
                 score++;
-                brick.enemyXpos = Math.floor(Math.random() * (canvas.width - ENEMY_SIZE)); // spawns in at random spots on the at y = 0
+                brick.enemyXpos = Math.floor(Math.random() * (canvas.width - ENEMYSIZE)); // spawns in at random spots on the at y = 0
             }
         });
 
     } // end func 
 
+
     function randenemy() {
 
         // enemy variables
-        var ENEMY_SIZE = Math.floor(Math.random() * (40 - 10) + 10);
-        var enemyXpos = Math.floor(Math.random() * (canvas.width - ENEMY_SIZE));
+        var ENEMYSIZE = Math.floor(Math.random() * (40 - 10) + 10);
+        var enemyXpos = Math.floor(Math.random() * (canvas.width - ENEMYSIZE));
         var enemyYpos = 0;
         var enemyXspeed = 0;
         var enemyYspeed = Math.floor(Math.random() * (10 - 5) + 2);
-
+  
         var newenemy = {
             enemyXpos: enemyXpos,
             enemyYpos: enemyYpos,
-            ENEMY_SIZE: ENEMY_SIZE,
+            ENEMYSIZE: ENEMYSIZE,
             enemyYspeed: enemyYspeed,
             enemyXspeed: enemyXspeed
         }
@@ -284,11 +250,10 @@
     }
 
 
-    // //Restart Button
-    // function reload() { //called from button pushed-->//
-    //     location.reload(); //runs code that refreshes page-->//
-    // }
-
+     //Restart Button
+     function reload() { //called from button pushed-->//
+         location.reload(); //runs code that refreshes page-->//
+    }
 
 
     //func to draw colored rects on canvas
